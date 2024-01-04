@@ -51,7 +51,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         velocityX = 0;
         velocityY = 1;
 
-        gameLoop = new Timer(100, this);
+        gameLoop = new Timer(120, this);
         gameLoop.start();
 
 
@@ -62,7 +62,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         draw(g);
     }
 
-    public  void draw(Graphics g){
+    public void draw(Graphics g){
 
         g.setColor(Color.red);
         g.fill3DRect(food.x * tileSize, food.y * tileSize, tileSize, tileSize, true);
@@ -77,7 +77,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         g.setFont(new Font("Arial", Font.PLAIN, 16));
         if(gameOver){
             g.setColor(Color.red);
-            g.drawString("Game Over " + String.valueOf(snakeBody.size()), tileSize-16, tileSize);
+            g.drawString("Game Over: " + String.valueOf(snakeBody.size()), tileSize-16, tileSize);
         }else{
             g.drawString("Score: " + String.valueOf(snakeBody.size()),tileSize-16, tileSize);
         }
@@ -124,10 +124,18 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             }
         }
 
-        if(snakeHead.x * tileSize < 0 || snakeHead.x * tileSize > boardWidth ||
-                snakeHead.y * tileSize < 0 || snakeHead.y * tileSize > boardHeight){
-            gameOver = true;
+        if (snakeHead.x < 0) {
+            snakeHead.x = boardWidth / tileSize - 1;
+        } else if (snakeHead.x >= boardWidth / tileSize) {
+            snakeHead.x = 0;
         }
+
+        if (snakeHead.y < 0) {
+            snakeHead.y = boardHeight / tileSize - 1;
+        } else if (snakeHead.y >= boardHeight / tileSize) {
+            snakeHead.y = 0;
+        }
+
     }
 
     @Override
@@ -142,19 +150,19 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        if(keyEvent.getKeyCode() == KeyEvent.VK_UP && velocityY != 1){
+        if(keyEvent.getKeyCode() == KeyEvent.VK_W && velocityY != 1){
             velocityX = 0;
             velocityY = -1;
         }
-        else if(keyEvent.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -1){
+        else if(keyEvent.getKeyCode() == KeyEvent.VK_S && velocityY != -1){
             velocityX = 0;
             velocityY = 1;
         }
-        else if(keyEvent.getKeyCode() == KeyEvent.VK_LEFT && velocityX != 1){
+        else if(keyEvent.getKeyCode() == KeyEvent.VK_A && velocityX != 1){
             velocityX = -1;
             velocityY = 0;
         }
-        else if(keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -1){
+        else if(keyEvent.getKeyCode() == KeyEvent.VK_D && velocityX != -1){
             velocityX = 1;
             velocityY = 0;
         }
