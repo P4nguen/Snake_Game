@@ -55,7 +55,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         velocityX = 0;
         velocityY = 1;
 
-        gameLoop = new Timer(120, this);
+        gameLoop = new Timer(100, this);
         gameLoop.start();
 
 
@@ -88,8 +88,26 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     }
 
     public void placeFood(){
-        food.x = random.nextInt(boardWidth/tileSize);
-        food.y = random.nextInt(boardHeight/tileSize);
+        do {
+            food.x = random.nextInt(boardWidth / tileSize);
+            food.y = random.nextInt(boardHeight / tileSize);
+        } while (isSnakeAt(food.x, food.y));
+    }
+
+    private boolean isSnakeAt(int x, int y) {
+        if(collision(snakeHead, new Tile(x, y))){
+            return true;
+        }
+
+        for(int i=0; i<snakeBody.size(); i++){
+            Tile snakePart = snakeBody.get(i);
+
+            if(collision(snakePart, new Tile(x, y))){
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -99,7 +117,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     public void playEatSound(){
         try{
-            File soundFile = new File("burpSoundSnakeGame.wav");
+            File soundFile = new File("click.wav");
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
@@ -108,7 +126,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             e.printStackTrace();
         }
     }
-
 
 
     public void move(){
