@@ -1,7 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.sound.sampled.*;
 import javax.swing.*;
 public class Game extends JPanel implements ActionListener, KeyListener{
 
@@ -93,13 +97,29 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         return tile1.x == tile2.x && tile1.y == tile2.y;
     }
 
+    public void playEatSound(){
+        try{
+            File soundFile = new File("burpSoundSnakeGame.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        }catch (UnsupportedAudioFileException | IOException | LineUnavailableException e){
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void move(){
 
         if(collision(snakeHead, food)){
             snakeBody.add(new Tile(food.x, food.y));
+
             placeFood();
+
+            playEatSound();
+
         }
 
         for(int i=snakeBody.size()-1; i>=0; i--){
